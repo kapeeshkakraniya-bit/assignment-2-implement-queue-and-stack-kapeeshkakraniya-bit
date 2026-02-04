@@ -9,36 +9,33 @@ public class StackUsingQueue<E> implements StackADT<E> {
 
     @Override
     public int size() {
-        // TODO: return q.size()
-        return -1;
+        return q.size();
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO: return q.isEmpty()
-        return true;
+        return q.isEmpty();
     }
 
     @Override
     public E top() {
-        // TODO: return q.first()
-        return null;
+        return q.first();
     }
 
     @Override
     public void push(E e) {
         Objects.requireNonNull(e, "Null elements are not supported in this assignment.");
 
-        // TODO:
-        // 1) q.enqueue(e)
-        // 2) rotate (size-1) times:
-        //    q.enqueue(q.dequeue());
-        // so the newest element becomes the front of the queue.
+        q.enqueue(e);
+        int rotations = q.size() - 1;
+        for (int i = 0; i < rotations; i++) {
+            E val = q.dequeue();
+            q.enqueue(val);
+        }
     }
 
     @Override
     public E pop() {
-        // TODO: return q.dequeue()
-        return null;
+        return q.dequeue();
     }
 }
