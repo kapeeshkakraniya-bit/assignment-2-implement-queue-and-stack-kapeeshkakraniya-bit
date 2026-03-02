@@ -2,56 +2,53 @@ import java.util.Objects;
 
 public class ArrayQueue<E> implements QueueADT<E> {
     private final E[] data;
-    private int front = 0;  // index of the front element
-    private int size = 0;   // number of elements in the queue
+    private int front = 0;
+    private int rear = 0;
 
     @SuppressWarnings("unchecked")
     public ArrayQueue(int capacity) {
         if (capacity <= 0) throw new IllegalArgumentException("capacity must be > 0");
-        this.data = (E[]) new Object[capacity];
+        this.data = (E[]) new Object[capacity + 1];
     }
 
     @Override
     public int size() {
-        // TODO: return current number of elements
-        return -1;
+        return (rear - front + data.length) % data.length;
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO: return true if size == 0
-        return true;
+       return front == rear;
+    }
+
+    private boolean isFull() {
+        return (rear + 1) % data.length == front;
     }
 
     @Override
     public E first() {
-        // TODO: if empty return null; else return data[front]
-        return null;
+        if (isEmpty()) return null;
+        return data[front];
     }
 
     @Override
     public void enqueue(E e) {
         Objects.requireNonNull(e, "Null elements are not supported in this assignment.");
-
-        // TODO:
-        // 1) if full (size == data.length) throw IllegalStateException
-        // 2) compute available index = (front + size) % data.length
-        // 3) store e there
-        // 4) increment size
+        if (isFull()) throw new IllegalStateException("Queue is full");
+        
+        data[rear] = e;
+        rear = (rear + 1) % data.length;
     }
 
     @Override
     public E dequeue() {
-        // TODO:
-        // 1) if empty return null
-        // 2) store answer = data[front]
-        // 3) set data[front] = null (help GC)
-        // 4) front = (front + 1) % data.length
-        // 5) decrement size
-        // 6) return answer
-        return null;
+        if (isEmpty()) return null;
+        E answer = data[front];
+        data[front] = null; 
+        front = (front + 1) % data.length; // Move front past the removed element
+        return answer;
     }
-
-    // Helpful for debugging (not graded)
-    int capacity() { return data.length; }
+    int capacity() { 
+        return data.length - 1; 
+    }
 }
